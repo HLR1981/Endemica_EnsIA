@@ -20,7 +20,7 @@ st.set_page_config(
 
 @st.cache_resource
 def load_model():
-    return tf.keras.models.load_model("modelo_flores_ensenada.keras")
+    return tf.keras.models.load_model("modelo_flores_ensenada.keras", compile=False)
 
 model = load_model()
 
