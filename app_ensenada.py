@@ -7,7 +7,6 @@ import os
 # ==========================================
 # CONFIGURACIÓN DE LA PÁGINA
 # ==========================================
-
 st.set_page_config(
     page_title="EndémicaEns",
     page_icon="🌸",
@@ -17,28 +16,31 @@ st.set_page_config(
 # ==========================================
 # CARGAR MODELO
 # ==========================================
-
 @st.cache_resource
 def load_model():
+    # El modelo se carga sin compilar para evitar choques de versiones
     return tf.keras.models.load_model("modelo_flores_ensenada.keras", compile=False)
 
 model = load_model()
 
 # ==========================================
-# CLASES
+# CLASES (Manual para evitar FileNotFoundError)
 # ==========================================
-
-data_dir = "dataset/train"
-
-nombres_clases = sorted([
-    f for f in os.listdir(data_dir)
-    if os.path.isdir(os.path.join(data_dir, f))
-])
+# Definimos la lista manualmente porque la carpeta 'dataset/train' no está en la nube
+nombres_clases = [
+    'amapola_de_california',
+    'choya_californiana',
+    'encelia_farinosa',
+    'encino_quercus_agrifolia',
+    'lila_california_ceanothus',
+    'maguey_costa_agave_shawii',
+    'rosa_castilla_rosa_minutifolia',
+    'salvia_munzii'
+]
 
 # ==========================================
 # NOMBRES BONITOS
 # ==========================================
-
 nombres_limpios = {
     'amapola_de_california': 'Amapola de California',
     'choya_californiana': 'Choya Californiana',
@@ -53,47 +55,27 @@ nombres_limpios = {
 # ==========================================
 # INFORMACIÓN DE FLORES
 # ==========================================
-
 info_flores = {
-
-    'Amapola de California':
-        "Flor silvestre de color naranja brillante, muy común en California y Baja California.",
-
-    'Choya Californiana':
-        "Cactus característico de zonas áridas y desérticas.",
-
-    'Encelia Farinosa':
-        "Arbusto resistente al calor con flores amarillas.",
-
-    'Encino Quercus':
-        "Árbol emblemático de ecosistemas mediterráneos.",
-
-    'Lila de California':
-        "Arbusto con flores azuladas y aroma agradable.",
-
-    'Maguey de la Costa':
-        "Planta suculenta endémica de Baja California.",
-
-    'Rosa de Castilla':
-        "Rosa silvestre poco común de la región.",
-
-    'Salvia de Munz':
-        "Planta aromática endémica con flores violetas."
+    'Amapola de California': "Flor silvestre de color naranja brillante, muy común en California y Baja California.",
+    'Choya Californiana': "Cactus característico de zonas áridas y desérticas.",
+    'Encelia Farinosa': "Arbusto resistente al calor con flores amarillas.",
+    'Encino Quercus': "Árbol emblemático de ecosistemas mediterráneos.",
+    'Lila de California': "Arbusto con flores azuladas y aroma agradable.",
+    'Maguey de la Costa': "Planta suculenta endémica de Baja California.",
+    'Rosa de Castilla': "Rosa silvestre poco común de la región.",
+    'Salvia de Munz': "Planta aromática endémica con flores violetas."
 }
 
 # ==========================================
 # TÍTULO
 # ==========================================
-
 st.title("🌸 EndémicaEns")
 st.subheader("Identificador de flora endémica de Ensenada")
-
 st.write("Sube una imagen de una flor para identificarla.")
 
 # ==========================================
 # SUBIR IMAGEN
 # ==========================================
-
 archivo = st.file_uploader(
     "Selecciona una imagen",
     type=["jpg", "jpeg", "png"]
@@ -102,88 +84,41 @@ archivo = st.file_uploader(
 # ==========================================
 # PREDICCIÓN
 # ==========================================
-
 if archivo is not None:
-
-    # Abrir imagen
-    img = Image.open(archivo)
-
-    # Convertir a RGB
-    img = img.convert("RGB")
-
-    # Mostrar imagen
+    # Procesamiento de imagen
+    img = Image.open(archivo).convert("RGB")
     st.image(img, caption="Imagen subida", use_container_width=True)
 
-    # Redimensionar
+    # Redimensionar y preparar para el modelo
     img_resized = img.resize((224, 224))
-
-    # Convertir a array
     img_array = tf.keras.utils.img_to_array(img_resized)
-
-    # Expandir dimensiones
     img_array = tf.expand_dims(img_array, 0)
 
-    # Predicción
+    # Ejecutar predicción
     predictions = model.predict(img_array)
-
-    # Softmax
     score = tf.nn.softmax(predictions[0])
-
-    # Índice con mayor probabilidad
     indice = np.argmax(score)
 
-    # Obtener clase
+    # Obtener nombres
     carpeta_original = nombres_clases[indice]
-
-    # Nombre bonito
-    nombre_mostrar = nombres_limpios.get(
-        carpeta_original,
-        carpeta_original
-    )
-
-    # Confianza
+    nombre_mostrar = nombres_limpios.get(carpeta_original, carpeta_original)
     confianza = 100 * np.max(score)
 
     st.divider()
 
-    # ==========================================
-    # VALIDACIÓN DE CONFIANZA
-    # ==========================================
-
+    # Validación de confianza
     if confianza < 70:
-
-        st.error(
-            "⚠️ No puedo identificar esta flor con suficiente seguridad."
-        )
-
+        st.error("⚠️ No puedo identificar esta flor con suficiente seguridad.")
     else:
-
         st.success(f"🌸 Resultado: {nombre_mostrar}")
-
-        st.write(f"Confianza: {confianza:.2f}%")
-
-        # Barra de progreso
+        st.write(f"**Confianza:** {confianza:.2f}%")
         st.progress(float(confianza) / 100)
 
-        # Información de la flor
-        descripcion = info_flores.get(
-            nombre_mostrar,
-            "Información no disponible."
-        )
-
+        descripcion = info_flores.get(nombre_mostrar, "Información no disponible.")
         st.info(descripcion)
 
-    # ==========================================
-    # MOSTRAR TODAS LAS PROBABILIDADES
-    # ==========================================
-
-    st.subheader("📊 Probabilidades")
-
-    for i, prob in enumerate(score):
-
-        nombre = nombres_limpios.get(
-            nombres_clases[i],
-            nombres_clases[i]
-        )
-
-        st.write(f"{nombre}: {100 * prob:.2f}%")
+    # Mostrar todas las probabilidades
+    with st.expander("📊 Ver desglose de probabilidades"):
+        for i, prob in enumerate(score):
+            nombre = nombres_limpios.get(nombres_clases[i], nombres_clases[i])
+            st.write(f"**{nombre}:** {100 * prob:.2f}%")
