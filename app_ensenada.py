@@ -56,11 +56,11 @@ info_flores = {
 # ==========================================
 # DISEÑO VISUAL: ENCABEZADO
 # ==========================================
-# Banner oficial con la hermosa Bahía de Ensenada, Baja California
+# Banner optimizado para servidores en la nube (Paisaje Costero de la región)
 st.image(
-    "https://upload.wikimedia.org/wikipedia/commons/e/e0/Bahia_de_ensenada.jpg", 
+    "https://images.unsplash.com/photo-1513407030348-c983a97b98d8?auto=format&fit=crop&w=1000&q=80", 
     use_container_width=True, 
-    caption="Bahía de Ensenada, Baja California"
+    caption="Paisaje de la costa de Baja California"
 )
 
 st.title("🌸 EndémicaEns")
@@ -80,7 +80,7 @@ with col1:
     archivo = st.file_uploader(
         "Selecciona una imagen",
         type=["jpg", "jpeg", "png"],
-        label_visibility="collapsed" # Oculta etiquetas repetitivas para un look más limpio
+        label_visibility="collapsed"
     )
     
     if archivo is not None:
@@ -91,7 +91,6 @@ with col2:
     st.markdown("### 🧠 Diagnóstico de la IA")
     
     if archivo is None:
-        # Mensaje de guía interactivo cuando la app está vacía
         st.info("💡 **Sistema listo.** Esperando que subas una imagen en la sección de la izquierda para iniciar el reconocimiento.")
     else:
         # Procesamiento de la predicción
@@ -108,13 +107,12 @@ with col2:
         nombre_mostrar = nombres_limpios.get(carpeta_original, carpeta_original)
         confianza = 100 * np.max(score)
 
-        # Despliegue formal del resultado obtenido
+        # Despliegue de resultados
         if confianza < 70:
-            st.error("⚠️ **No se pudo identificar con seguridad.** La confianza es muy baja. Intenta tomar la foto con mejor iluminación, enfocando mejor la flor y evitando sombras.")
+            st.error("⚠️ **No se pudo identificar con seguridad.** La confianza es muy baja. Intenta tomar la foto con mejor iluminación, enfocando mejor la flor.")
         else:
             st.success(f"### Especie detectada:\n## **{nombre_mostrar}**")
             
-            # Formato numérico destacado para la certeza de predicción
             st.metric(label="Certeza del análisis", value=f"{confianza:.2f}%")
             st.progress(float(confianza) / 100)
             
