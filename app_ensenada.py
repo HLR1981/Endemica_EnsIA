@@ -56,14 +56,13 @@ info_flores = {
 # ==========================================
 # DISEÑO VISUAL: ENCABEZADO
 # ==========================================
-# 1. Primero se dibuja la foto de la Carretera Escénica
+# Cambiamos la foto de Japón por el enlace directo de la Carretera Escénica de Ensenada
 st.image(
-    "banner.jpg.png", 
+    "https://noro.mx/wp-content/uploads/2023/03/carretera-escenica-tijuana-ensenada-1.jpg", 
     use_container_width=True, 
     caption="Carretera Escénica Tijuana-Ensenada, Baja California"
 )
 
-# 2. Inmediatamente abajo, el título ÚNICO de la aplicación
 st.title("🌸 EndémicaEns")
 st.markdown("### **Identificador Inteligente de Flora Endémica de Ensenada**")
 st.write("Esta aplicación utiliza Inteligencia Artificial para reconocer especies de plantas nativas de la región de Baja California. Sube una foto clara y de cerca para obtener mejores resultados.")
