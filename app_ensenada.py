@@ -56,31 +56,26 @@ info_flores = {
 # ==========================================
 # DISEÑO VISUAL: ENCABEZADO
 # ==========================================
-# Cargamos la imagen desde un servidor CDN global para evitar problemas de permisos de servidor
-st.image(
-    "https://images.unsplash.com/photo-1629814249584-bb4d323e95ef?auto=format&fit=crop&w=1200&q=80", 
-    use_container_width=True, 
-    caption="Paisaje de la costa de Baja California"
-)
+# Un banner sutil de naturaleza para darle color al inicio
+st.image("https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1000&q=80", use_container_width=True)
 
 st.title("🌸 EndémicaEns")
-st.markdown("### **Identificador Inteligente de Flora Endémica de Ensenada**")
-st.write("Esta aplicación utiliza Inteligencia Artificial para reconocer especies de plantas nativas de la región de Baja California. Sube una foto clara y de cerca para obtener mejores resultados.")
+st.subheader("Identificador de flora endémica de Ensenada")
 st.markdown("---")
 
 # ==========================================
-# DISEÑO EN COLUMNAS (MÓDULOS DE INTERFAZ)
+# DISEÑO EN COLUMNAS (AQUÍ ESTÁ EL TRUCO)
 # ==========================================
 col1, col2 = st.columns([1, 1], gap="large")
 
 with col1:
     st.markdown("### 📸 Sube tu foto")
-    st.write("Selecciona o toma una fotografía desde tu dispositivo.")
+    st.write("Selecciona o toma una fotografía de cerca para que la IA la analice.")
     
     archivo = st.file_uploader(
         "Selecciona una imagen",
         type=["jpg", "jpeg", "png"],
-        label_visibility="collapsed"
+        label_visibility="collapsed" # Ocultamos el texto repetitivo del uploader
     )
     
     if archivo is not None:
@@ -91,6 +86,7 @@ with col2:
     st.markdown("### 🧠 Diagnóstico de la IA")
     
     if archivo is None:
+        # Estado de espera amigable
         st.info("💡 **Sistema listo.** Esperando que subas una imagen en la sección de la izquierda para iniciar el reconocimiento.")
     else:
         # Procesamiento de la predicción
@@ -107,16 +103,17 @@ with col2:
         nombre_mostrar = nombres_limpios.get(carpeta_original, carpeta_original)
         confianza = 100 * np.max(score)
 
-        # Despliegue de resultados
+        # Despliegue de resultados con diseño limpio
         if confianza < 70:
-            st.error("⚠️ **No se pudo identificar con seguridad.** La confianza es muy baja. Intenta tomar la foto con mejor iluminación, enfocando mejor la flor.")
+            st.error("⚠️ **No se pudo identificar con seguridad.** La confianza es muy baja. Intenta tomar la foto con mejor iluminación o más cerca de la flor.")
         else:
             st.success(f"### Especie detectada:\n## **{nombre_mostrar}**")
             
+            # Usamos st.metric para que el porcentaje se vea gigante y genial
             st.metric(label="Certeza del análisis", value=f"{confianza:.2f}%")
             st.progress(float(confianza) / 100)
             
-            st.markdown("#### ℹ️ Descripción de la especie")
+            st.markdown("#### ℹ️ Descripción")
             descripcion = info_flores.get(nombre_mostrar, "Información no disponible.")
             st.info(descripcion)
 
@@ -126,7 +123,7 @@ with col2:
 if archivo is not None:
     st.markdown("---")
     with st.expander("📊 Ver desglose técnico de probabilidades"):
-        st.write("Nivel de coincidencia exacto que el modelo matemático asignó a cada una de las especies de nuestro catálogo:")
+        st.write("Este es el nivel de coincidencia que la inteligencia artificial asignó a cada una de las especies posibles:")
         for i, prob in enumerate(score):
             nombre = nombres_limpios.get(nombres_clases[i], nombres_clases[i])
             porcentaje = 100 * prob
