@@ -56,9 +56,9 @@ info_flores = {
 # ==========================================
 # DISEÑO VISUAL: ENCABEZADO
 # ==========================================
-# Cambiamos la foto de Japón por el enlace directo de la Carretera Escénica de Ensenada
+# URL de respaldo libre y optimizada para la Carretera Escénica de Ensenada
 st.image(
-    "https://noro.mx/wp-content/uploads/2023/03/carretera-escenica-tijuana-ensenada-1.jpg", 
+    "https://raw.githubusercontent.com/HLR1981/Endemica_EnsIA/main/banner.jpg.png", 
     use_container_width=True, 
     caption="Carretera Escénica Tijuana-Ensenada, Baja California"
 )
