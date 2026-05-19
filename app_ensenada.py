@@ -56,11 +56,11 @@ info_flores = {
 # ==========================================
 # DISEÑO VISUAL: ENCABEZADO
 # ==========================================
-# Banner optimizado para servidores en la nube (Paisaje Costero de la región)
+# Banner local sincronizado con el archivo de tu GitHub
 st.image(
-    "https://images.unsplash.com/photo-1513407030348-c983a97b98d8?auto=format&fit=crop&w=1000&q=80", 
+    "banner.jpg.png", 
     use_container_width=True, 
-    caption="Paisaje de la costa de Baja California"
+    caption="Carretera Escénica Tijuana-Ensenada, Baja California"
 )
 
 st.title("🌸 EndémicaEns")
