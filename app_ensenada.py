@@ -44,7 +44,7 @@ nombres_limpios = {
 
 info_flores = {
     'Amapola de California': "Flor silvestre de color naranja brillante, muy común en California y Baja California.",
-    'Choya Californiana': "Cactus característico de zonas áritas y desérticas.",
+    'Choya Californiana': "Cactus característico de zonas áridas y desérticas.",
     'Encelia Farinosa': "Arbusto resistente al calor con flores amarillas.",
     'Encino Quercus': "Árbol emblemático de ecosistemas mediterráneos.",
     'Lila de California': "Arbusto con flores azuladas y aroma agradable.",
@@ -56,14 +56,14 @@ info_flores = {
 # ==========================================
 # DISEÑO VISUAL: ENCABEZADO
 # ==========================================
-# Tu foto local de la Carretera Escénica enlazada de forma correcta
+# 1. Primero se dibuja la foto de la Carretera Escénica
 st.image(
     "banner.jpg.png", 
     use_container_width=True, 
     caption="Carretera Escénica Tijuana-Ensenada, Baja California"
 )
 
-# Un solo bloque de presentación limpio y profesional
+# 2. Inmediatamente abajo, el título ÚNICO de la aplicación
 st.title("🌸 EndémicaEns")
 st.markdown("### **Identificador Inteligente de Flora Endémica de Ensenada**")
 st.write("Esta aplicación utiliza Inteligencia Artificial para reconocer especies de plantas nativas de la región de Baja California. Sube una foto clara y de cerca para obtener mejores resultados.")
