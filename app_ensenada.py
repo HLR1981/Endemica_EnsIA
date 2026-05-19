@@ -58,7 +58,7 @@ info_flores = {
 # ==========================================
 # Banner oficial cargado de forma local desde tu repositorio
 st.image(
-    "banner.jpg", 
+    "banner.jpg.jpg", 
     use_container_width=True, 
     caption="Paisaje de la costa de Baja California"
 )
