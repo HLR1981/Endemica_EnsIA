@@ -56,11 +56,11 @@ info_flores = {
 # ==========================================
 # DISEÑO VISUAL: ENCABEZADO
 # ==========================================
-# URL de respaldo libre y optimizada para la Carretera Escénica de Ensenada
+# Cargamos la imagen desde un servidor CDN global para evitar problemas de permisos de servidor
 st.image(
-    "https://raw.githubusercontent.com/HLR1981/Endemica_EnsIA/main/banner.jpg.png", 
+    "https://images.unsplash.com/photo-1629814249584-bb4d323e95ef?auto=format&fit=crop&w=1200&q=80", 
     use_container_width=True, 
-    caption="Carretera Escénica Tijuana-Ensenada, Baja California"
+    caption="Paisaje de la costa de Baja California"
 )
 
 st.title("🌸 EndémicaEns")
